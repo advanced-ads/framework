@@ -57,9 +57,13 @@
         <type>error</type>
     </rule>
 
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax">
-        <type>error</type>
-    </rule>
+	<!-- Disable short arrays: -->
+	<rule ref="WordPress-Extra">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+	</rule>
+
+	<!-- Enforce short arrays: -->
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
 	<!-- Method names MUST NOT be prefixed with a single underscore to indicate protected or private visibility. That is, an underscore prefix explicitly has no meaning. -->
     <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
