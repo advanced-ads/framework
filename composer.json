@@ -1,0 +1,45 @@
+{
+	"name": "advanced-ads/advanced-ads-genesis",
+    "description": "Place ads on various positions within Genesis themes",
+	"homepage": "https://wpadvancedads.com/",
+	"version": "1.42.1",
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0-or-later",
+	"prefer-stable": true,
+	"minimum-stability": "dev",
+	"authors": [
+		{
+			"name": "Advanced Ads",
+			"email": "info@wpadvancedads.com",
+			"homepage": "https://wpadvancedads.com"
+		}
+	],
+	"require": {
+		"php": ">=7.2"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpcompatibility/phpcompatibility-wp": "*",
+		"wp-coding-standards/wpcs": "^2.3"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"sort-packages": true,
+		"platform": {
+			"php": "7.2"
+		},
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"autoload": {
+		"classmap": [
+			"src/"
+		]
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"composer global require wp-cli/wp-cli"
+		]
+	}
+}

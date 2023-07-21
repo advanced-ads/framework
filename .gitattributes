@@ -1,0 +1,25 @@
+# Set the default behavior, in case people don't have `core.autocrlf` set.
+* text=auto
+
+# Declare files that will always have LF line endings on checkout.
+*.php text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.aar binary
+*.gif binary
+*.jar binary
+*.jpg binary
+*.png binary
+*.ttf binary
+*.webp binary
+
+# Remove files for archives generated using `git archive`.
+/.*                export-ignore
+.changelog/        export-ignore
+bin/               export-ignore
+changelog.txt      export-ignore
+composer.*         export-ignore
+package*.json      export-ignore
+phpunit.*          export-ignore
+README.md          export-ignore
+tests              export-ignore

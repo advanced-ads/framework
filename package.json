@@ -1,0 +1,51 @@
+{
+	"name": "advanced-ads-genesis",
+	"title": "Advanced Ads – Genesis",
+	"description": "Place ads on various positions within Genesis themes",
+	"homepage": "https://wpadvancedads.com/",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/advanced-ads/advanced-ads-genesis.git"
+	},
+	"author": "AdvancedAds",
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/advanced-ads/advanced-ads-genesis/issues"
+	},
+	"scripts": {
+		"prepare": "husky install",
+		"dev": "mix",
+		"watch": "mix watch",
+		"watch-poll": "mix watch -- --watch-options-poll=1000",
+		"hot": "mix watch --hot",
+		"dist": "mix --production",
+		"lint": "lint-staged",
+		"lint:p": "prettier -c .",
+		"lint:php": "vendor/bin/phpcs"
+	},
+	"devDependencies": {
+		"async": "^3.2.4",
+		"chalk": "^5.3.0",
+		"husky": "^8.0.3",
+		"lint-staged": "^13.2.3",
+		"prettier": "^3.0.0",
+		"shelljs": "^0.8.5",
+		"webpack": "^5.88.2"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 1 Android versions",
+		"last 1 ChromeAndroid versions",
+		"last 2 Chrome versions",
+		"last 2 Firefox versions",
+		"last 2 Safari versions",
+		"last 2 iOS versions",
+		"last 2 Edge versions",
+		"last 2 Opera versions"
+	],
+	"lint-staged": {
+		"*.php": "vendor/bin/phpcs",
+		"*.md": "prettier -c"
+	}
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "@wordpress/stylelint-config",
+  "ignoreFiles": [
+	"**/*.js",
+	"assets/css/*.min.css",
+	"node_modules/**/*.css",
+	"vendor/**/*.css"
+  ]
+}

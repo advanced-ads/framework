@@ -1,0 +1,38 @@
+# Wordpress - ignore core, configuration, examples, uploads and logs.
+# https://github.com/github/gitignore/blob/main/WordPress.gitignore
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/*
+project.xml
+project.properties
+.project
+.settings*
+*.sublime-project
+*.sublime-workspace
+.sublimelinterrc
+
+# Caches
+.eslintcache
+.stylelintcache
+
+# Environment files
+wp-cli.local.yml
+.wp-env.override.json
+npm-debug.log
+.pnpm-debug.log
+
+# Node Package Dependencies
+node_modules/
+
+# Composer
+vendor/
+bin/composer/**/vendor/
+
+# Support .gitkeep Files
+!.gitkeep
+webpack.mix.local.js
+mix-manifest.json
