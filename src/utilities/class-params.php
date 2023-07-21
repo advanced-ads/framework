@@ -1,12 +1,18 @@
 <?php
 /**
- * JSON manger class
+ * Params class
  *
- * It handles json output for use on backend and frontend.
+ * Easy access to inputs from
+ *    INPUT_COOKIE
+ *    INPUT_GET
+ *    INPUT_POST
+ *    INPUT_REQUEST
+ *    INPUT_ENV
+ *    INPUT_SERVER
  *
  * @package AdvancedAds\Framework\Utilities
  * @author  Advanced Ads <info@wpadvancedads.com>
- * @since   1.0.8
+ * @since   1.0.0
  */
 
 namespace AdvancedAds\Framework\Utilities;
@@ -14,7 +20,7 @@ namespace AdvancedAds\Framework\Utilities;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Params class.
+ * Params class
  */
 class Params {
 

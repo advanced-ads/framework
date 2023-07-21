@@ -6,7 +6,7 @@
  *
  * @package AdvancedAds\Framework
  * @author  Advanced Ads <info@wpadvancedads.com>
- * @since   1.0.8
+ * @since   1.0.0
  */
 
 namespace AdvancedAds\Framework;
