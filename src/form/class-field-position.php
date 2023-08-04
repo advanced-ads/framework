@@ -23,25 +23,23 @@ class Field_Position extends Field {
 	 */
 	public function render() {
 		?>
-		<div class="advads-position">
-			<table>
-				<?php foreach ( [ 'top', 'center', 'bottom' ] as $parent ) : ?>
-				<tr>
-					<?php
-					foreach ( [ 'left', 'center', 'right' ] as $child ) :
-						$key = $parent . $child;
-						if ( 'centercenter' === $key ) {
-							$key = $child;
-						}
-						?>
-					<td>
-						<input type="radio" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="<?php echo esc_attr( $key ); ?>"<?php checked( $key, $this->get( 'value' ) ); ?><?php disabled( in_array( $key, $this->get( 'disabled', [] ), true ) ); ?> />
-					</td>
-					<?php endforeach; ?>
-				</tr>
+		<table>
+			<?php foreach ( [ 'top', 'center', 'bottom' ] as $parent ) : ?>
+			<tr>
+				<?php
+				foreach ( [ 'left', 'center', 'right' ] as $child ) :
+					$key = $parent . $child;
+					if ( 'centercenter' === $key ) {
+						$key = $child;
+					}
+					?>
+				<td>
+					<input type="radio" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="<?php echo esc_attr( $key ); ?>"<?php checked( $key, $this->get( 'value' ) ); ?><?php disabled( in_array( $key, $this->get( 'disabled', [] ), true ) ); ?> />
+				</td>
 				<?php endforeach; ?>
-			</table>
-		</div>
+			</tr>
+			<?php endforeach; ?>
+		</table>
 		<?php
 	}
 }

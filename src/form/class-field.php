@@ -73,9 +73,9 @@ abstract class Field {
 
 		$this->wrap_before();
 		?>
-		<div id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" class="advads-option advads-option-<?php echo sanitize_html_class( $class ); ?>">
-			<span><?php echo esc_html( $this->get( 'label' ) ); ?></span>
-			<div>
+		<div id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" class="advads-option advads-field advads-field-<?php echo sanitize_html_class( $this->get( 'type' ) ); ?> advads-option-<?php echo sanitize_html_class( $class ); ?>">
+			<span class="advads-field-label"><?php echo esc_html( $this->get( 'label' ) ); ?></span>
+			<div class="advads-field-input">
 				<?php
 				if ( ! $this->get( 'is_pro_pitch' ) ) {
 					$this->render();
