@@ -26,7 +26,7 @@ function advanced_ads_framework_css() {
 			clear: both;
 		}
 		.advads-field-position table tbody tr td {
-			width: 3em;
+			width: 3em !important;
 			height: 2em;
 			text-align: center;
 			vertical-align: middle;
@@ -35,7 +35,7 @@ function advanced_ads_framework_css() {
 	</style>
 	<?php
 }
-add_action( 'wp_head', __NAMESPACE__ . '\\advanced_ads_framework_css', 100, 0 );
+add_action( 'admin_head', __NAMESPACE__ . '\\advanced_ads_framework_css', 100, 0 );
 
 /**
  * Register JS
@@ -51,4 +51,4 @@ function advanced_ads_framework_js() {
 	</script>
 	<?php
 }
-add_action( 'wp_footer', __NAMESPACE__ . '\\advanced_ads_framework_js', 100, 0 );
+add_action( 'admin_footer', __NAMESPACE__ . '\\advanced_ads_framework_js', 100, 0 );
