@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Integration interface.
  */
-interface WordPress_Integration {
+interface Integration_Interface {
 
 	/**
 	 * Hook into WordPress.
