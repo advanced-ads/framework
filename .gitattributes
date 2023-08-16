@@ -14,10 +14,10 @@
 *.webp binary
 
 # Remove files for archives generated using `git archive`.
+/.*                export-ignore
 .changelog/        export-ignore
 bin/               export-ignore
 changelog.txt      export-ignore
-composer.*         export-ignore
 package*.json      export-ignore
 phpunit.*          export-ignore
 README.md          export-ignore
