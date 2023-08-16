@@ -14,7 +14,6 @@
 *.webp binary
 
 # Remove files for archives generated using `git archive`.
-/.*                export-ignore
 .changelog/        export-ignore
 bin/               export-ignore
 changelog.txt      export-ignore
