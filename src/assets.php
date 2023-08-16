@@ -9,7 +9,10 @@
 
 namespace AdvancedAds\Framework;
 
-defined( 'ABSPATH' ) || exit;
+// Early bail!!
+if ( ! function_exists( 'add_action' ) ) {
+	return;
+}
 
 /**
  * Register CSS
