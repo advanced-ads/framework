@@ -49,7 +49,9 @@ function advanced_ads_framework_js() {
 	?>
 	<script>
 		jQuery(document).ready(function($) {
-			$('.advads-field-color .advads-field-input input').wpColorPicker({defaultColor: '#5d5d5d'});
+			if (undefined !== jQuery.fn.wpColorPicker) {
+				$('.advads-field-color .advads-field-input input').wpColorPicker({defaultColor: '#5d5d5d'});
+			}
 		});
 	</script>
 	<?php
