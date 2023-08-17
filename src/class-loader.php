@@ -151,4 +151,18 @@ class Loader {
 
 		return null;
 	}
+
+	/**
+	 * Define constant if not already set.
+	 *
+	 * @param string      $name  Constant name.
+	 * @param bool|string $value Constant value.
+	 *
+	 * @return void
+	 */
+	protected function define( $name, $value ): void {
+		if ( ! defined( $name ) ) {
+			define( $name, $value );
+		}
+	}
 }
