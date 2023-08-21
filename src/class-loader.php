@@ -37,36 +37,80 @@ class Loader {
 	protected $routes = [];
 
 	/**
+	 * Hold containers
+	 *
+	 * @var array
+	 */
+	protected $containers = [];
+
+	/**
+	 * Get container.
+	 *
+	 * @param string $container_id Container id or alias.
+	 *
+	 * @return mixed
+	 */
+	public function get_container( $container_id ) {
+		return isset( $this->containers[ $container_id ] ) ?? null;
+	}
+
+	/**
+	 * Add container.
+	 *
+	 * @param string $container_id Container id or alias.
+	 * @param mixed  $container    Container instance.
+	 *
+	 * @return mixed
+	 */
+	public function add_container( $container_id, $container ) {
+		$this->containers[ $container_id ] = $container;
+	}
+
+	/**
 	 * Registers an integration.
 	 *
-	 * @param string $integration_class The class name of the integration to be loaded.
+	 * @param string $integration The class name of the integration to be loaded.
+	 * @param string $alias       The class alias.
 	 *
 	 * @return void
 	 */
-	public function register_integration( $integration_class ) {
-		$this->integrations[] = $integration_class;
+	public function register_integration( $integration, $alias = '' ) {
+		if ( '' === $alias ) {
+			$this->integrations[] = $integration;
+		} else {
+			$this->integrations[ $alias ] = $integration;
+		}
 	}
 
 	/**
 	 * Registers an initializer.
 	 *
-	 * @param string $initializer_class The class name of the initializer to be loaded.
-	 *
+	 * @param string $initializer The class name of the initializer to be loaded.
+	 * @param string $alias       The class alias.
 	 * @return void
 	 */
-	public function register_initializer( $initializer_class ) {
-		$this->initializers[] = $initializer_class;
+	public function register_initializer( $initializer, $alias = '' ) {
+		if ( '' === $alias ) {
+			$this->initializers[] = $initializer;
+		} else {
+			$this->initializers[ $alias ] = $initializer;
+		}
 	}
 
 	/**
 	 * Registers a route.
 	 *
-	 * @param string $route_class The class name of the route to be loaded.
+	 * @param string $router The class name of the route to be loaded.
+	 * @param string $alias  The class alias.
 	 *
 	 * @return void
 	 */
-	public function register_route( $route_class ) {
-		$this->routes[] = $route_class;
+	public function register_route( $router, $alias = '' ) {
+		if ( '' === $alias ) {
+			$this->routes[] = $router;
+		} else {
+			$this->routes[ $alias ] = $router;
+		}
 	}
 
 	/**
@@ -92,14 +136,8 @@ class Loader {
 	 * @return void
 	 */
 	protected function load_initializers() {
-		foreach ( $this->initializers as $class ) {
-			$initializer = $this->get_class( $class );
-
-			if ( null === $initializer ) {
-				continue;
-			}
-
-			$initializer->initialize();
+		foreach ( $this->initializers as $alias => $class ) {
+			$this->create_container( $class, 'initialize', $alias );
 		}
 	}
 
@@ -109,14 +147,8 @@ class Loader {
 	 * @return void
 	 */
 	public function load_integrations() {
-		foreach ( $this->integrations as $class ) {
-			$integration = $this->get_class( $class );
-
-			if ( null === $integration ) {
-				continue;
-			}
-
-			$integration->hooks();
+		foreach ( $this->integrations as $alias => $class ) {
+			$this->create_container( $class, 'hooks', $alias );
 		}
 	}
 
@@ -126,14 +158,30 @@ class Loader {
 	 * @return void
 	 */
 	public function load_routes() {
-		foreach ( $this->routes as $class ) {
-			$route = $this->get_class( $class );
+		foreach ( $this->routes as $alias => $class ) {
+			$this->create_container( $class, 'register_routes', $alias );
+		}
+	}
 
-			if ( null === $route ) {
-				continue;
-			}
+	/**
+	 * Create container if needed.
+	 *
+	 * @param string $class  Class name.
+	 * @param string $method Method to execute.
+	 * @param string $alias  Class alias.
+	 *
+	 * @return void
+	 */
+	private function create_container( $class, $method, $alias ): void {
+		$container = $this->get_class( $class );
+		if ( null === $container ) {
+			return;
+		}
 
-			$route->register_routes();
+		$container->$method();
+
+		if ( is_string( $alias ) ) {
+			$this->containers[ $alias ] = $container;
 		}
 	}
 
@@ -144,7 +192,7 @@ class Loader {
 	 *
 	 * @return object|null The class or, in production environments, null if it does not exist.
 	 */
-	protected function get_class( $class_name ) {
+	private function get_class( $class_name ) {
 		if ( \class_exists( $class_name, true ) ) {
 			return new $class_name();
 		}
