@@ -15,6 +15,10 @@ defined( 'ABSPATH' ) || exit;
  * Loader class
  */
 class Loader {
+
+	const AS_INTEGRATIONS = 'integrations';
+	const AS_INITIALIZERS = 'initializers';
+
 	/**
 	 * The registered integrations.
 	 *
@@ -59,11 +63,15 @@ class Loader {
 	 *
 	 * @param string $container_id Container id or alias.
 	 * @param mixed  $container    Container instance.
+	 * @param string $as           Add container as.
 	 *
 	 * @return mixed
 	 */
-	public function add_container( $container_id, $container ) {
+	public function add_container( $container_id, $container, $as = '' ) {
 		$this->containers[ $container_id ] = $container;
+
+		// Add pre initialized container to load routines.
+		$this->{$as}[] = $container;
 	}
 
 	/**
@@ -173,6 +181,11 @@ class Loader {
 	 * @return void
 	 */
 	private function create_container( $class, $method, $alias ): void {
+		// Class already loaded.
+		if ( is_string( $class ) ) {
+			return;
+		}
+
 		$container = $this->get_class( $class );
 		if ( null === $container ) {
 			return;
