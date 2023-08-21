@@ -139,7 +139,7 @@ class Notice implements Serializable {
 	 *
 	 * @return void
 	 */
-	public function unserialize( string $data ): void {}
+	public function unserialize( $data ): void {}
 
 	/**
 	 * Return data from options.
@@ -149,7 +149,7 @@ class Notice implements Serializable {
 	 * @return mixed
 	 */
 	public function option( $id ) {
-		return $this->options[ $id ];
+		return $this->options[ $id ] ?? null;
 	}
 
 	/**
@@ -187,14 +187,14 @@ class Notice implements Serializable {
 		// Maintain WordPress visualization of alerts when they are not persistent.
 		if ( $this->is_persistent() ) {
 			$classes[]    = 'is-dismissible';
-			$attributes[] = 'data-key="' . $this->option( 'persistent' ) . '"';
-			$attributes[] = 'data-security="' . wp_create_nonce( $this->option( 'id' ) ) . '"';
+			$attributes[] = sprintf( 'data-key="%s"', $this->option( 'persistent' ) );
+			$attributes[] = sprintf( 'data-security="%s"', wp_create_nonce( $this->option( 'id' ) ) );
 		}
 
-		$attributes[] = 'class="' . join( ' ', $classes ) . '"';
+		$attributes[] = sprintf( 'class="%s"', join( ' ', $classes ) );
 
 		// Build the output DIV.
-		return '<div' . join( ' ', $attributes ) . '>' . wpautop( $this->message ) . '</div>' . PHP_EOL;
+		return '<div ' . join( ' ', $attributes ) . '>' . wpautop( $this->message ) . '</div>' . PHP_EOL;
 	}
 
 	/**
