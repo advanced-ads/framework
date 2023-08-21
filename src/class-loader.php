@@ -182,7 +182,7 @@ class Loader {
 	 */
 	private function create_container( $class, $method, $alias ): void {
 		// Class already loaded.
-		if ( is_string( $class ) ) {
+		if ( ! is_string( $class ) ) {
 			return;
 		}
 
