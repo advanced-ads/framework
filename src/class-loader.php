@@ -55,7 +55,7 @@ class Loader {
 	 * @return mixed
 	 */
 	public function get_container( $container_id ) {
-		return isset( $this->containers[ $container_id ] ) ?? null;
+		return $this->containers[ $container_id ] ?? null;
 	}
 
 	/**

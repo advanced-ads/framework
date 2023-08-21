@@ -38,7 +38,7 @@ abstract class Field {
 			'style'         => '',
 			'wrapper_class' => '',
 			'value'         => '',
-			'name'          => isset( $field['name'] ) ? $field['name'] : $field['id'],
+			'name'          => $field['name'] ?? $field['id'],
 			'type'          => 'text',
 			'desc'          => '',
 			'is_pro_pitch'  => false,
@@ -56,7 +56,7 @@ abstract class Field {
 	 * @return mixed
 	 */
 	public function get( $id, $default = false ) {
-		return isset( $this->field[ $id ] ) ? $this->field[ $id ] : $default;
+		return $this->field[ $id ] ?? $default;
 	}
 
 	/**

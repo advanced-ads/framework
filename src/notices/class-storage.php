@@ -68,7 +68,7 @@ class Storage implements Integration_Interface {
 	 * @return null|Notice
 	 */
 	public function get_by_id( $notice_id ) {
-		return isset( $this->notices[ $notice_id ] ) ?? null;
+		return $this->notices[ $notice_id ] ?? null;
 	}
 
 	/**
