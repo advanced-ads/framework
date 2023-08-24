@@ -9,15 +9,14 @@
 
 namespace AdvancedAds\Framework;
 
+use ReflectionClass;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Loader class
  */
 class Loader {
-
-	const AS_INTEGRATIONS = 'integrations';
-	const AS_INITIALIZERS = 'initializers';
 
 	/**
 	 * The registered integrations.
@@ -48,77 +47,28 @@ class Loader {
 	protected $containers = [];
 
 	/**
-	 * Get container.
+	 * Override magic method
 	 *
-	 * @param string $container_id Container id or alias.
-	 *
-	 * @return mixed
-	 */
-	public function get_container( $container_id ) {
-		return $this->containers[ $container_id ] ?? null;
-	}
-
-	/**
-	 * Add container.
-	 *
-	 * @param string $container_id Container id or alias.
-	 * @param mixed  $container    Container instance.
-	 * @param string $as           Add container as.
+	 * @param string $name Name of property.
 	 *
 	 * @return mixed
 	 */
-	public function add_container( $container_id, $container, $as = '' ) {
-		$this->containers[ $container_id ] = $container;
-
-		// Add pre initialized container to load routines.
-		$this->{$as}[] = $container;
-	}
-
-	/**
-	 * Registers an integration.
-	 *
-	 * @param string $integration The class name of the integration to be loaded.
-	 * @param string $alias       The class alias.
-	 *
-	 * @return void
-	 */
-	public function register_integration( $integration, $alias = '' ) {
-		if ( '' === $alias ) {
-			$this->integrations[] = $integration;
-		} else {
-			$this->integrations[ $alias ] = $integration;
+	public function __get( $name ) {
+		if ( array_key_exists( $name, $this->containers ) ) {
+			return $this->containers[ $name ];
 		}
-	}
 
-	/**
-	 * Registers an initializer.
-	 *
-	 * @param string $initializer The class name of the initializer to be loaded.
-	 * @param string $alias       The class alias.
-	 * @return void
-	 */
-	public function register_initializer( $initializer, $alias = '' ) {
-		if ( '' === $alias ) {
-			$this->initializers[] = $initializer;
-		} else {
-			$this->initializers[ $alias ] = $initializer;
-		}
-	}
+		// phpcs:disable
+		$trace = debug_backtrace();
+		trigger_error(
+			'Undefined property via __get(): ' . $name .
+			' in ' . $trace[0]['file'] .
+			' on line ' . $trace[0]['line'],
+			E_USER_NOTICE
+		);
+		// phpcs:enable
 
-	/**
-	 * Registers a route.
-	 *
-	 * @param string $router The class name of the route to be loaded.
-	 * @param string $alias  The class alias.
-	 *
-	 * @return void
-	 */
-	public function register_route( $router, $alias = '' ) {
-		if ( '' === $alias ) {
-			$this->routes[] = $router;
-		} else {
-			$this->routes[ $alias ] = $router;
-		}
+		return null;
 	}
 
 	/**
@@ -136,6 +86,67 @@ class Loader {
 		}
 
 		\add_action( 'rest_api_init', [ $this, 'load_routes' ] );
+	}
+
+	/**
+	 * Register as.
+	 *
+	 * @param string $register_as Register the container as.
+	 * @param string $class_name  The class name of the registery to be loaded.
+	 * @param string $alias       The class alias.
+	 * @param array  $args        The constructor arguments.
+	 *
+	 * @return void
+	 */
+	private function register( $register_as, $class_name, $alias = '', $args = null ) {
+		if ( ! empty( $args ) ) {
+			$class_name = [ $class_name, $args ];
+		}
+
+		if ( '' === $alias ) {
+			$this->{$register_as}[] = $class_name;
+		} else {
+			$this->{$register_as}[ $alias ] = $class_name;
+		}
+	}
+
+	/**
+	 * Register an integration.
+	 *
+	 * @param string $integration The class name of the integration to be loaded.
+	 * @param string $alias       The class alias.
+	 * @param array  $args        The constructor arguments.
+	 *
+	 * @return void
+	 */
+	public function register_integration( $integration, $alias = '', $args = null ) {
+		$this->register( 'integrations', $integration, $alias, $args );
+	}
+
+	/**
+	 * Register an initializer.
+	 *
+	 * @param string $initializer The class name of the initializer to be loaded.
+	 * @param string $alias       The class alias.
+	 * @param array  $args        The constructor arguments.
+	 *
+	 * @return void
+	 */
+	public function register_initializer( $initializer, $alias = '', $args = null ) {
+		$this->register( 'initializers', $initializer, $alias, $args );
+	}
+
+	/**
+	 * Register a route.
+	 *
+	 * @param string $router The class name of the route to be loaded.
+	 * @param string $alias  The class alias.
+	 * @param array  $args   The constructor arguments.
+	 *
+	 * @return void
+	 */
+	public function register_route( $router, $alias = '', $args = null ) {
+		$this->register( 'routes', $router, $alias, $args );
 	}
 
 	/**
@@ -174,19 +185,22 @@ class Loader {
 	/**
 	 * Create container if needed.
 	 *
-	 * @param string $class  Class name.
+	 * @param string $data   Class data.
 	 * @param string $method Method to execute.
 	 * @param string $alias  Class alias.
 	 *
 	 * @return void
 	 */
-	private function create_container( $class, $method, $alias ): void {
-		// Class already loaded.
-		if ( ! is_string( $class ) ) {
+	private function create_container( $data, $method, $alias ): void {
+		$class_name = is_string( $data ) ? $data : $data[0];
+		$arguments  = is_string( $data ) ? [] : $data[1];
+
+		if ( ! \class_exists( $class_name, true ) ) {
 			return;
 		}
 
-		$container = $this->get_class( $class );
+		$container = new ReflectionClass( $class_name );
+		$container = $container->newInstanceArgs( $arguments );
 		if ( null === $container ) {
 			return;
 		}
@@ -196,21 +210,6 @@ class Loader {
 		if ( is_string( $alias ) ) {
 			$this->containers[ $alias ] = $container;
 		}
-	}
-
-	/**
-	 * Gets a class from the container.
-	 *
-	 * @param string $class_name The class name.
-	 *
-	 * @return object|null The class or, in production environments, null if it does not exist.
-	 */
-	private function get_class( $class_name ) {
-		if ( \class_exists( $class_name, true ) ) {
-			return new $class_name();
-		}
-
-		return null;
 	}
 
 	/**

@@ -52,35 +52,34 @@
 		<exclude-pattern>includes/**/interface-*.php</exclude-pattern>
 	</rule>
 
+	<!-- Disable disallow short arrays and enforce them: -->
+	<rule ref="WordPress-Extra">
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+	</rule>
+
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
 	<!-- Elevate these rules to an error, so it gets printed on commit   -->
     <rule ref="Generic.Formatting.MultipleStatementAlignment">
         <type>error</type>
     </rule>
 
-	<!-- Disable short arrays: -->
-	<rule ref="WordPress-Extra">
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
-	</rule>
-
-	<!-- Enforce short arrays: -->
-	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
-
-	<!-- Method names MUST NOT be prefixed with a single underscore to indicate protected or private visibility. That is, an underscore prefix explicitly has no meaning. -->
-    <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+	<rule ref="Generic.CodeAnalysis.AssignmentInCondition">
         <type>error</type>
-        <message>Method name "%s" must not be prefixed with an underscore to indicate visibility</message>
+    </rule>
+
+	<rule ref="Universal.Operators.StrictComparisons">
+        <type>error</type>
     </rule>
 
 	<rule ref="WordPress.PHP.StrictInArray">
         <type>error</type>
     </rule>
 
-	<rule ref="WordPress.PHP.StrictComparisons">
+	<!-- Method names MUST NOT be prefixed with a single underscore to indicate protected or private visibility. That is, an underscore prefix explicitly has no meaning. -->
+    <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
         <type>error</type>
-    </rule>
-
-	<rule ref="WordPress.CodeAnalysis.AssignmentInCondition">
-        <type>error</type>
+        <message>Method name "%s" must not be prefixed with an underscore to indicate visibility</message>
     </rule>
 
 </ruleset>

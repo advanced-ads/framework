@@ -35,22 +35,12 @@ class JSON {
 	private $default_object_name = null;
 
 	/**
-	 * Retrieve main instance.
+	 * The constructor
 	 *
-	 * Ensure only one instance is loaded or can be loaded.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return JSON
+	 * @param string $object_name Object name to be used.
 	 */
-	public static function get() {
-		static $instance;
-
-		if ( is_null( $instance ) && ! ( $instance instanceof JSON ) ) {
-			$instance = new JSON();
-		}
-
-		return $instance;
+	public function __construct( $object_name ) {
+		$this->default_object_name = $object_name;
 	}
 
 	/**
@@ -69,19 +59,6 @@ class JSON {
 
 		$hook = is_admin() ? 'admin_footer' : 'wp_footer';
 		add_action( $hook, [ $this, 'output' ], 0 );
-		return $this;
-	}
-
-	/**
-	 * Set default object name.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param  string $name Object name.
-	 * @return JSON
-	 */
-	public function set_object_name( $name ) {
-		$this->default_object_name = $name;
 		return $this;
 	}
 
@@ -215,7 +192,7 @@ class JSON {
 		}
 
 		foreach ( (array) $object_data as $key => $value ) {
-			if ( ! is_string( $value ) ) {
+			if ( ! is_scalar( $value ) ) {
 				continue;
 			}
 
