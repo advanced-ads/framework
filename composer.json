@@ -2,7 +2,7 @@
 	"name": "advanced-ads/framework",
     "description": "Place ads on various positions within Genesis themes",
 	"homepage": "https://wpadvancedads.com/",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"type": "wordpress-plugin",
 	"license": "GPL-3.0-or-later",
 	"prefer-stable": true,
