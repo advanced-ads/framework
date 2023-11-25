@@ -24,7 +24,7 @@ class Formatting {
 	 */
 	public static function string_to_bool( $str ): bool {
 		$str = $str ?? '';
-		return is_bool( $str ) ? $str : ( 'yes' === strtolower( $str ) || 1 === $str || 'true' === strtolower( $str ) || '1' === $str );
+		return is_bool( $str ) ? $str : ( 'yes' === strtolower( $str ) || 1 === $str || 'true' === strtolower( $str ) || '1' === $str || 'on' === strtolower( $str ) );
 	}
 
 	/**
