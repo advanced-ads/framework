@@ -35,40 +35,70 @@ function advanced_ads_framework_css() {
 			vertical-align: middle;
 			padding: 0;
 		}
+
+		/* Switch */
 		.advads-field-switch input[type=checkbox] {
-			display: none;
+			--active: #275EFE;
+			--active-inner: #fff;
+			--focus: 2px rgba(39, 94, 254, .3);
+			--border: #BBC1E1;
+			--border-hover: #275EFE;
+			--background: #fff;
+			--disabled: #F6F8FF;
+			--disabled-inner: #E1E6F9;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			height: 21px;
+			outline: none;
+			display: inline-block;
+			vertical-align: top;
+			position: relative;
+			margin: 0;
+			cursor: pointer;
+			border: 1px solid var(--bc, var(--border));
+			background: var(--b, var(--background));
+			transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
 		}
-		.advads-field-switch input[type=checkbox]:checked ~ .toggle {
-			background: #009688;
-			left: 52px;
-			transition: 0.5s;
-		}
-		.advads-field-switch input[type=checkbox]:checked ~ .switch {
-			background: #6DBEB7;
-			transition: 0.5s;
-		}
-
-		.advads-field-switch .switch {
+		.advads-field-switch input[type=checkbox]:after {
+			content: "";
 			display: block;
-			width: 100px;
-			height: 40px;
-			background: #939393;
-			border-radius: 20px;
-			position: absolute;
+			left: 0;
 			top: 0;
-			transition: 0.5s;
-		}
-
-		.advads-field-switch .toggle {
-			height: 56px;
-			width: 56px;
-			border-radius: 50%;
-			background: white;
 			position: absolute;
-			top: -8px;
-			left: -8px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-			transition: 0.5s;
+			transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+		}
+		.advads-field-switch input[type=checkbox]:checked {
+			--b: var(--active);
+			--bc: var(--active);
+			--d-o: .3s;
+			--d-t: .6s;
+			--d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+		}
+		.advads-field-switch input[type=checkbox]:disabled {
+			--b: var(--disabled);
+			cursor: not-allowed;
+			opacity: 0.9;
+		}
+		.advads-field-switch input[type=checkbox]:disabled:checked {
+			--b: var(--disabled-inner);
+			--bc: var(--border);
+		}
+		.advads-field-switch input[type=checkbox]:disabled + label {
+			cursor: not-allowed;
+		}
+		.advads-field-switch input[type=checkbox]:hover:not(:checked):not(:disabled) {
+			--bc: var(--border-hover);
+		}
+		.advads-field-switch input[type=checkbox]:focus {
+			box-shadow: 0 0 0 var(--focus);
+		}
+		.advads-field-switch input[type=checkbox] + label {
+			font-size: 14px;
+			line-height: 21px;
+			display: inline-block;
+			vertical-align: top;
+			cursor: pointer;
+			margin-left: 4px;
 		}
 	</style>
 	<?php
