@@ -41,12 +41,13 @@ class Form {
 		$this->field_types = [
 			'checkbox' => Field_Checkbox::class,
 			'color'    => Field_Color::class,
+			'number'   => Field_Text::class,
 			'position' => Field_Position::class,
+			'password' => Field_Text::class,
 			'radio'    => Field_Radio::class,
 			'size'     => Field_Size::class,
+			'switch'   => Field_Switch::class,
 			'text'     => Field_Text::class,
-			'number'   => Field_Text::class,
-			'password' => Field_Text::class,
 			'textarea' => Field_Textarea::class,
 		];
 	}

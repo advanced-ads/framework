@@ -35,6 +35,41 @@ function advanced_ads_framework_css() {
 			vertical-align: middle;
 			padding: 0;
 		}
+		.advads-field-switch input[type=checkbox] {
+			display: none;
+		}
+		.advads-field-switch input[type=checkbox]:checked ~ .toggle {
+			background: #009688;
+			left: 52px;
+			transition: 0.5s;
+		}
+		.advads-field-switch input[type=checkbox]:checked ~ .switch {
+			background: #6DBEB7;
+			transition: 0.5s;
+		}
+
+		.advads-field-switch .switch {
+			display: block;
+			width: 100px;
+			height: 40px;
+			background: #939393;
+			border-radius: 20px;
+			position: absolute;
+			top: 0;
+			transition: 0.5s;
+		}
+
+		.advads-field-switch .toggle {
+			height: 56px;
+			width: 56px;
+			border-radius: 50%;
+			background: white;
+			position: absolute;
+			top: -8px;
+			left: -8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+			transition: 0.5s;
+		}
 	</style>
 	<?php
 }
