@@ -24,7 +24,7 @@ class Field_Switch extends Field {
 	public function render() {
 		?>
 		<input class="switch" type="checkbox" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="1"<?php checked( $this->get( 'value' ), '1' ); ?> />
-		<label for="<?php echo esc_attr( $this->get( 'id' ) ); ?>">&nbsp;</label>
+		<label for="<?php echo esc_attr( $this->get( 'id' ) ); ?>"><?php echo esc_attr( $this->get( 'switch_label' ) ); ?></label>
 		<?php
 	}
 }
