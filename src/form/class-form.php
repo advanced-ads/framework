@@ -45,6 +45,8 @@ class Form {
 			'radio'    => Field_Radio::class,
 			'size'     => Field_Size::class,
 			'text'     => Field_Text::class,
+			'number'   => Field_Text::class,
+			'password' => Field_Text::class,
 			'textarea' => Field_Textarea::class,
 		];
 	}

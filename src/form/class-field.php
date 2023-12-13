@@ -42,6 +42,8 @@ abstract class Field {
 			'type'          => 'text',
 			'desc'          => '',
 			'is_pro_pitch'  => false,
+			'cols'          => 30,
+			'rows'          => 10,
 		];
 
 		$this->field = wp_parse_args( $field, $defaults );

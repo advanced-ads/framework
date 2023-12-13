@@ -22,5 +22,8 @@ class Field_Text extends Field {
 	 * @return void
 	 */
 	public function render() {
+		?>
+		<input name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" type="<?php echo esc_attr( $this->get( 'type' ) ); ?>" value="<?php echo esc_attr( $this->get( 'value' ) ); ?>" />
+		<?php
 	}
 }

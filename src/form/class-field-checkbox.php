@@ -22,5 +22,20 @@ class Field_Checkbox extends Field {
 	 * @return void
 	 */
 	public function render() {
+		// Early bail!!
+		if ( ! $this->get( 'options' ) ) {
+			return;
+		}
+
+		echo '<div class="advads-checkbox-list">';
+		foreach ( $this->get( 'options' ) as $key => $label ) :
+			?>
+			<label>
+				<input type="checkbox" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>[]" value="<?php echo esc_attr( $key ); ?>"<?php checked( $this->get( 'value' ), $key ); ?> /><?php echo esc_html( $label ); ?>
+			</label>
+			<?php
+		endforeach;
+
+		echo '</div>';
 	}
 }
