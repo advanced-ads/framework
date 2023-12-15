@@ -23,7 +23,7 @@ class Field_Selector extends Field {
 	 */
 	public function render() {
 		?>
-		<div id="advads-frontend-element-<?php echo esc_attr( $this->get( 'id' ) ); ?>">
+		<div id="advads-frontend-element-<?php echo esc_attr( $this->get( 'placement_id' ) ); ?>">
 			<input type="text" class="advads-frontend-element" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="<?php echo esc_attr( $this->get( 'value' ) ); ?>" />
 			<button style="display:none; color: red;" type="button" class="advads-deactivate-frontend-picker button">
 				stop selection
