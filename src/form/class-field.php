@@ -10,6 +10,7 @@
 namespace AdvancedAds\Framework\Form;
 
 use Advanced_Ads_Admin_Upgrades;
+use AdvancedAds\Framework\Utilities\Str;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -73,15 +74,25 @@ abstract class Field {
 		 */
 		$class = apply_filters( 'advanced-ads-option-class', $this->get( 'id' ) );
 
+		$classnames = Str::classnames(
+			'advads-option',
+			'advads-field',
+			'advads-field-' . sanitize_html_class( $this->get( 'type' ) ),
+			'advads-option-' . sanitize_html_class( $class ),
+			sanitize_html_class( $this->get( 'wrapper_class' ) )
+		);
+
 		$this->wrap_before();
 		?>
-		<div id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" class="advads-option advads-field advads-field-<?php echo sanitize_html_class( $this->get( 'type' ) ); ?> advads-option-<?php echo sanitize_html_class( $class ); ?>">
+		<div id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" class="<?php echo $classnames; // phpcs:ignore ?>">
 			<span class="advads-field-label"><?php echo esc_html( $this->get( 'label' ) ); ?></span>
 			<div class="advads-field-input">
 				<?php
-				if ( ! $this->get( 'is_pro_pitch' ) ) {
-					$this->render();
-				}
+
+				$this->render_callback( 'before' );
+				$this->render();
+				$this->render_callback( 'after' );
+
 				if ( $this->get( 'desc' ) ) {
 					echo '<p class="description">' . wp_kses_post( $this->get( 'desc' ) ) . '</p>';
 				}
@@ -102,18 +113,14 @@ abstract class Field {
 	 *
 	 * @return void
 	 */
-	public function wrap_before() {
-
-	}
+	public function wrap_before() {}
 
 	/**
 	 * HTML after wrap
 	 *
 	 * @return void
 	 */
-	public function wrap_after() {
-
-	}
+	public function wrap_after() {}
 
 	/**
 	 * Render
@@ -121,4 +128,21 @@ abstract class Field {
 	 * @return void
 	 */
 	abstract public function render();
+
+	/**
+	 * Render callback
+	 *
+	 * @param string $name Id of callback.
+	 *
+	 * @return void
+	 */
+	private function render_callback( $name ): void {
+		$callback = $this->get( $name );
+		// Early bail!!
+		if ( ! $callback || ! is_callable( $callback ) ) {
+			return;
+		}
+
+		call_user_func( $callback, $this );
+	}
 }

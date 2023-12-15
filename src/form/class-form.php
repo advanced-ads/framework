@@ -45,6 +45,7 @@ class Form {
 			'position' => Field_Position::class,
 			'password' => Field_Text::class,
 			'radio'    => Field_Radio::class,
+			'selector' => Field_Selector::class,
 			'size'     => Field_Size::class,
 			'switch'   => Field_Switch::class,
 			'text'     => Field_Text::class,

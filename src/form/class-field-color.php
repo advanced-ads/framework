@@ -23,7 +23,7 @@ class Field_Color extends Field {
 	 */
 	public function render() {
 		?>
-		<input name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" type="text" value="<?php echo esc_attr( $this->get( 'value' ) ); ?>" />
+		<input class="<?php echo sanitize_html_class( $this->get( 'class' ) ); ?>" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" type="text" value="<?php echo esc_attr( $this->get( 'value' ) ); ?>" />
 		<?php
 	}
 }

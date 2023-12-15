@@ -23,7 +23,7 @@ class Field_Position extends Field {
 	 */
 	public function render() {
 		?>
-		<table>
+		<table class="<?php echo sanitize_html_class( $this->get( 'class' ) ); ?>">
 			<?php foreach ( [ 'top', 'center', 'bottom' ] as $parent ) : ?>
 			<tr>
 				<?php

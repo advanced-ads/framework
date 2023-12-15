@@ -27,7 +27,7 @@ class Field_Checkbox extends Field {
 			return;
 		}
 
-		echo '<div class="advads-checkbox-list">';
+		echo '<div class="advads-checkbox-list ' . sanitize_html_class( $this->get( 'class' ) ) . '">';
 		foreach ( $this->get( 'options' ) as $key => $label ) :
 			?>
 			<label>

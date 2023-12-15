@@ -27,7 +27,7 @@ class Field_Radio extends Field {
 			return;
 		}
 
-		echo '<div class="advads-radio-list">';
+		echo '<div class="advads-radio-list ' . sanitize_html_class( $this->get( 'class' ) ) . '">';
 		foreach ( $this->get( 'options' ) as $key => $label ) :
 			?>
 			<label>

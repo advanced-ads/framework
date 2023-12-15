@@ -23,7 +23,7 @@ class Field_Textarea extends Field {
 	 */
 	public function render() {
 		?>
-		<textarea name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" cols="<?php echo esc_attr( $this->get( 'cols' ) ); ?>" rows="<?php echo esc_attr( $this->get( 'rows' ) ); ?>">
+		<textarea class="<?php echo sanitize_html_class( $this->get( 'class' ) ); ?>" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" cols="<?php echo esc_attr( $this->get( 'cols' ) ); ?>" rows="<?php echo esc_attr( $this->get( 'rows' ) ); ?>">
 			<?php echo esc_textarea( $this->get( 'value' ) ); ?>
 		</textarea>
 		<?php
