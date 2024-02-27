@@ -118,7 +118,7 @@ class Notice implements Serializable {
 	}
 
 	/**
-	 * Serialize data.
+	 * Serialize data, for PHP version < 7.4.0
 	 *
 	 * @return string
 	 */
@@ -133,7 +133,29 @@ class Notice implements Serializable {
 	}
 
 	/**
-	 * Unserialize string.
+	 * Return an array representing the serialized form the object. For PHP version >= 7.4.0
+	 *
+	 * @return array
+	 */
+	public function __serialize(): array {
+		return [
+			'id'      => $this->id,
+			'message' => $this->message,
+			'options' => $this->options,
+		];
+	}
+
+	/**
+	 * Recreate an instance of this class. For PHP version >= 7.4.0
+	 *
+	 * @param array $data the array returned by __serialize.
+	 *
+	 * @return void
+	 */
+	public function __unserialize( $data ): void {}
+
+	/**
+	 * Unserialize string, for PHP version < 7.4.0
 	 *
 	 * @param string $data Data to unserialize.
 	 *
