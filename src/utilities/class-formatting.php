@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * Formatting class.
  */
 class Formatting {
+
 	/**
 	 * Converts a string (e.g. 'yes' or 'no') to a bool.
 	 *
@@ -84,7 +85,7 @@ class Formatting {
 	 */
 	public static function clean( $value ) {
 		if ( is_array( $value ) ) {
-			return array_map( [ sel::class, 'clean' ], $value );
+			return array_map( [ self::class, 'clean' ], $value );
 		}
 
 		return is_scalar( $value ) ? sanitize_text_field( $value ) : $value;
@@ -140,46 +141,5 @@ class Formatting {
 				]
 			)
 		);
-	}
-
-	/**
-	 * Wrapper for mb_strtoupper which see's if supported first.
-	 *
-	 * @param string $str String to format.
-	 *
-	 * @return string
-	 */
-	public static function strtoupper( $str ) {
-		$str = $str ?? '';
-		return function_exists( 'mb_strtoupper' ) ? mb_strtoupper( $str ) : strtoupper( $str );
-	}
-
-	/**
-	 * Make a string lowercase.
-	 * Try to use mb_strtolower() when available.
-	 *
-	 * @param string $str String to format.
-	 *
-	 * @return string
-	 */
-	public static function strtolower( $str ) {
-		$str = $str ?? '';
-		return function_exists( 'mb_strtolower' ) ? mb_strtolower( $str ) : strtolower( $str );
-	}
-
-	/**
-	 * Implode and escape HTML attributes for output.
-	 *
-	 * @param array $raw_attributes Attribute name value pairs.
-	 *
-	 * @return string
-	 */
-	public static function join_html_attributes( $raw_attributes ) {
-		$attributes = [];
-		foreach ( $raw_attributes as $name => $value ) {
-			$attributes[] = esc_attr( $name ) . '="' . esc_attr( $value ) . '"';
-		}
-
-		return implode( ' ', $attributes );
 	}
 }
