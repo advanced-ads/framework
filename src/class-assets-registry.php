@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Assets Registry.
  */
-class Assets_Registry implements Integration_Interface {
+abstract class Assets_Registry implements Integration_Interface {
 
 	/**
 	 * Version of plugin local asset.
@@ -40,7 +40,7 @@ class Assets_Registry implements Integration_Interface {
 	 * @return void
 	 */
 	public static function enqueue_style( $handle ): void {
-		wp_enqueue_style( self::prefix_it( $handle ) );
+		wp_enqueue_style( static::prefix_it( $handle ) );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Assets_Registry implements Integration_Interface {
 	 * @return void
 	 */
 	public static function enqueue_script( $handle ): void {
-		wp_enqueue_script( self::prefix_it( $handle ) );
+		wp_enqueue_script( static::prefix_it( $handle ) );
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Assets_Registry implements Integration_Interface {
 	 * @return string
 	 */
 	public static function prefix_it( $handle ): string {
-		return self::PREFIX . '-' . $handle;
+		return static::PREFIX . '-' . $handle;
 	}
 
 	/**
@@ -71,6 +71,7 @@ class Assets_Registry implements Integration_Interface {
 	 * @return void
 	 */
 	public function hooks(): void {
+		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ], 0 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ], 0 );
 	}
 
@@ -109,12 +110,12 @@ class Assets_Registry implements Integration_Interface {
 	 *
 	 * @return void
 	 */
-	private function register_style( $handle, $src, $deps = [], $ver = false, $media = 'all' ) {
+	protected function register_style( $handle, $src, $deps = [], $ver = false, $media = 'all' ) {
 		if ( false === $ver ) {
-			$ver = self::VERSION;
+			$ver = static::VERSION;
 		}
 
-		wp_register_style( self::prefix_it( $handle ), ADVADS_BASE_URL . $src, $deps, $ver, $media );
+		wp_register_style( static::prefix_it( $handle ), ADVADS_BASE_URL . $src, $deps, $ver, $media );
 	}
 
 	/**
@@ -128,12 +129,11 @@ class Assets_Registry implements Integration_Interface {
 	 *
 	 * @return void
 	 */
-	private function register_script( $handle, $src, $deps = [], $ver = false, $in_footer = false ) {
+	protected function register_script( $handle, $src, $deps = [], $ver = false, $in_footer = false ) {
 		if ( false === $ver ) {
-			$ver = self::VERSION;
+			$ver = static::VERSION;
 		}
 
-		$new_src = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? $src : str_replace( '.js', '.min.js', $src );
-		wp_register_script( self::prefix_it( $handle ), ADVADS_BASE_URL . $src, $deps, $ver, $in_footer );
+		wp_register_script( static::prefix_it( $handle ), ADVADS_BASE_URL . $src, $deps, $ver, $in_footer );
 	}
 }
