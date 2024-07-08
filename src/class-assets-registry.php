@@ -33,6 +33,17 @@ abstract class Assets_Registry implements Integration_Interface {
 	const PREFIX = 'advads';
 
 	/**
+	 * Prefix the handle
+	 *
+	 * @param string $handle Name of the asset.
+	 *
+	 * @return string
+	 */
+	public static function prefix_it( $handle ): string {
+		return static::PREFIX . '-' . $handle;
+	}
+
+	/**
 	 * Enqueue stylesheet
 	 *
 	 * @param string $handle Name of the stylesheet.
@@ -55,14 +66,16 @@ abstract class Assets_Registry implements Integration_Interface {
 	}
 
 	/**
-	 * Prefix the handle
+	 * Determines whether a script has been added to the queue.
 	 *
-	 * @param string $handle Name of the asset.
+	 * @param string $handle Name of the script.
+	 * @param string $status Optional. Status of the script to check. Default 'enqueued'.
+	 *                       Accepts 'enqueued', 'registered', 'queue', 'to_do', and 'done'.
 	 *
-	 * @return string
+	 * @return bool
 	 */
-	public static function prefix_it( $handle ): string {
-		return static::PREFIX . '-' . $handle;
+	public static function script_is( $handle, $status = 'enqueued' ): bool {
+		return wp_script_is( static::prefix_it( $handle ), $status );
 	}
 
 	/**
