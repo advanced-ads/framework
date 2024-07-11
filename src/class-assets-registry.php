@@ -123,7 +123,7 @@ abstract class Assets_Registry implements Integration_Interface {
 	 *
 	 * @return void
 	 */
-	protected function register_style( $handle, $src, $deps = [], $ver = false, $media = 'all' ) {
+	public function register_style( $handle, $src, $deps = [], $ver = false, $media = 'all' ) {
 		if ( false === $ver ) {
 			$ver = static::VERSION;
 		}
@@ -142,7 +142,7 @@ abstract class Assets_Registry implements Integration_Interface {
 	 *
 	 * @return void
 	 */
-	protected function register_script( $handle, $src, $deps = [], $ver = false, $in_footer = false ) {
+	public function register_script( $handle, $src, $deps = [], $ver = false, $in_footer = false ) {
 		if ( false === $ver ) {
 			$ver = static::VERSION;
 		}
