@@ -19,63 +19,61 @@ defined( 'ABSPATH' ) || exit;
 abstract class Assets_Registry implements Integration_Interface {
 
 	/**
-	 * Version of plugin local asset.
+	 * Base URL for plugin local assets.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	const VERSION = '1.0.0';
+	abstract public function get_base_url(): string;
 
 	/**
 	 * Prefix to use in handle to make it unique.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	const PREFIX = 'advads';
+	abstract public function get_prefix(): string;
 
 	/**
-	 * Prefix the handle
-	 *
-	 * @param string $handle Name of the asset.
+	 * Version for plugin local assets.
 	 *
 	 * @return string
 	 */
-	public static function prefix_it( $handle ): string {
-		return static::PREFIX . '-' . $handle;
-	}
+	abstract public function get_version(): string;
 
 	/**
-	 * Enqueue stylesheet
+	 * Magic method to catch all calls to.
 	 *
-	 * @param string $handle Name of the stylesheet.
+	 * @param string $name      The name of the method.
+	 * @param array  $arguments The arguments passed to the method.
 	 *
-	 * @return void
+	 * @return mixed
 	 */
-	public static function enqueue_style( $handle ): void {
-		wp_enqueue_style( static::prefix_it( $handle ) );
-	}
+	public function __call( $name, $arguments ) {
+		if ( preg_match( '/^(enqueue|dequeue|register|deregister|is|inline)_(script|style)$/', $name, $matches ) ) {
+			$action    = $matches[1];
+			$type      = $matches[2];
+			$handle    = $this->prefix_it( $arguments[0] );
+			$func      = $this->resolve_function( $action . '_' . $type );
+			$func_args = [ $handle ];
 
-	/**
-	 * Enqueue script
-	 *
-	 * @param string $handle Name of the script.
-	 *
-	 * @return void
-	 */
-	public static function enqueue_script( $handle ): void {
-		wp_enqueue_script( static::prefix_it( $handle ) );
-	}
+			switch ( $action ) {
+				case 'register':
+					$func_args[] = $this->resolve_url( $arguments[1] );
+					$func_args[] = $arguments[2] ?? [];
+					$func_args[] = isset( $arguments[3] ) && ! empty( $arguments[3] ) ? $arguments[3] : $this->get_version();
+					$func_args[] = $arguments[4] ?? ( 'script' === $type ? true : 'all' );
+					break;
+				case 'is':
+					$func_args[] = $arguments[1] ?? 'enqueued';
+					break;
+				case 'inline':
+					$func_args[] = $arguments[1] ?? '';
+					break;
+				default:
+					break;
+			}
 
-	/**
-	 * Determines whether a script has been added to the queue.
-	 *
-	 * @param string $handle Name of the script.
-	 * @param string $status Optional. Status of the script to check. Default 'enqueued'.
-	 *                       Accepts 'enqueued', 'registered', 'queue', 'to_do', and 'done'.
-	 *
-	 * @return bool
-	 */
-	public static function script_is( $handle, $status = 'enqueued' ): bool {
-		return wp_script_is( static::prefix_it( $handle ), $status );
+			return call_user_func_array( $func, $func_args );
+		}
 	}
 
 	/**
@@ -99,6 +97,17 @@ abstract class Assets_Registry implements Integration_Interface {
 	}
 
 	/**
+	 * Prefix the handle
+	 *
+	 * @param string $handle Name of the asset.
+	 *
+	 * @return string
+	 */
+	public function prefix_it( $handle ): string {
+		return $this->get_prefix() . '-' . $handle;
+	}
+
+	/**
 	 * Register styles
 	 *
 	 * @return void
@@ -113,40 +122,40 @@ abstract class Assets_Registry implements Integration_Interface {
 	public function register_scripts(): void {}
 
 	/**
-	 * Register stylesheet
+	 * Resolves the URL.
 	 *
-	 * @param string           $handle Name of the stylesheet. Should be unique.
-	 * @param string|bool      $src    URL of the stylesheet.
-	 * @param string[]         $deps   Optional. An array of registered stylesheet handles this stylesheet depends on.
-	 * @param string|bool|null $ver    Optional. String specifying stylesheet version number.
-	 * @param string           $media  Optional. The media for which this stylesheet has been defined.
+	 * If the provided URL is an absolute URL or protocol-relative URL, it is returned as is.
+	 * Otherwise, the base URL is prepended to the relative path.
 	 *
-	 * @return void
+	 * @param string $src The source URL.
+	 *
+	 * @return string The resolved URL.
 	 */
-	public function register_style( $handle, $src, $deps = [], $ver = false, $media = 'all' ) {
-		if ( false === $ver ) {
-			$ver = static::VERSION;
+	private function resolve_url( $src ): string {
+		if ( preg_match( '/^(https?:)?\/\//', $src ) ) {
+			return $src;
 		}
 
-		wp_register_style( static::prefix_it( $handle ), ADVADS_BASE_URL . $src, $deps, $ver, $media );
+		return static::get_base_url() . $src;
 	}
 
 	/**
-	 * Register script
+	 * Resolves the function name.
 	 *
-	 * @param string           $handle    Name of the stylesheet. Should be unique.
-	 * @param string|bool      $src       URL of the stylesheet.
-	 * @param string[]         $deps      Optional. An array of registered stylesheet handles this stylesheet depends on.
-	 * @param string|bool|null $ver       Optional. String specifying stylesheet version number.
-	 * @param bool             $in_footer Optional. The media for which this stylesheet has been defined.
+	 * @param string $name The name of the function.
 	 *
-	 * @return void
+	 * @return string
 	 */
-	public function register_script( $handle, $src, $deps = [], $ver = false, $in_footer = false ) {
-		if ( false === $ver ) {
-			$ver = static::VERSION;
-		}
+	private function resolve_function( $name ): string {
+		$method_map = [
+			'is_script'     => 'script_is',
+			'is_style'      => 'style_is',
+			'inline_script' => 'add_inline_script',
+			'inline_style'  => 'add_inline_style',
+		];
 
-		wp_register_script( static::prefix_it( $handle ), ADVADS_BASE_URL . $src, $deps, $ver, $in_footer );
+		$name = $method_map[ $name ] ?? $name;
+
+		return 'wp_' . $name;
 	}
 }
