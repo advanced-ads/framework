@@ -15,6 +15,24 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Assets Registry.
+ *
+ * Script functions:
+ *
+ * @method void enqueue_script(string $handle)
+ * @method void dequeue_script(string $handle)
+ * @method void deregister_script(string $handle)
+ * @method bool register_script(string $handle, string|false $src, string[] $deps = [], string|bool|null $ver = false, array|bool $args = [])
+ * @method bool inline_script(string $handle, string $data, string $position = 'after')
+ * @method bool is_script(string $handle, string $status = 'enqueued')
+ *
+ * Style functions:
+ *
+ * @method void enqueue_style(string $handle)
+ * @method void dequeue_style(string $handle)
+ * @method void deregister_style(string $handle)
+ * @method bool register_style(string $handle, string|false $src, string[] $deps = [], string|bool|null $ver = false, string $media = 'all')
+ * @method bool inline_style(string $handle, string $data, )
+ * @method bool is_style(string $handle, string $status = 'enqueued')
  */
 abstract class Assets_Registry implements Integration_Interface {
 
@@ -67,6 +85,9 @@ abstract class Assets_Registry implements Integration_Interface {
 					break;
 				case 'inline':
 					$func_args[] = $arguments[1] ?? '';
+					if ( 'script' === $type ) {
+						$func_args[] = $arguments[2] ?? 'after';
+					}
 					break;
 				default:
 					break;
