@@ -48,7 +48,7 @@ abstract class Install implements Initializer_Interface {
 	 * @return void
 	 */
 	public function activation( $network_wide = false ): void {
-		register_uninstall_hook( $this->base_file, [ self::class, 'uninstall' ] );
+		register_uninstall_hook( $this->base_file, [ static::class, 'uninstall' ] );
 
 		if ( ! is_multisite() || ! $network_wide ) {
 			$this->activate();
