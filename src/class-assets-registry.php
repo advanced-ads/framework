@@ -157,7 +157,7 @@ abstract class Assets_Registry implements Integration_Interface {
 			return $src;
 		}
 
-		return static::get_base_url() . $src;
+		return $this->get_base_url() . $src;
 	}
 
 	/**
