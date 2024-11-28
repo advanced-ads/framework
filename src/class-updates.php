@@ -65,7 +65,7 @@ abstract class Updates {
 	 *
 	 * @return Updates
 	 */
-	public function hooks() {
+	public function hooks(): void {
 		if ( empty( $this->get_folder() ) ) {
 			throw new InvalidArgumentException( 'Please set the folder path for update files.' );
 		}
