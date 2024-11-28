@@ -63,7 +63,7 @@ abstract class Updates {
 	 * @throws InvalidArgumentException When version not defined.
 	 * @throws InvalidArgumentException When option name not defined.
 	 *
-	 * @return Updates
+	 * @return void
 	 */
 	public function hooks(): void {
 		if ( empty( $this->get_folder() ) ) {
@@ -79,8 +79,6 @@ abstract class Updates {
 		}
 
 		add_action( 'admin_init', [ $this, 'do_updates' ] );
-
-		return $this;
 	}
 
 	/**
