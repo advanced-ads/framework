@@ -17,8 +17,6 @@
 
 namespace AdvancedAds\Framework\Utilities;
 
-defined( 'ABSPATH' ) || exit;
-
 /**
  * Params class
  */
