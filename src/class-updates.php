@@ -125,7 +125,7 @@ abstract class Updates {
 
 		foreach ( $this->get_updates() as $version => $path ) {
 			if ( version_compare( $installed_version, $version, '<' ) ) {
-				include $this->get_folder() . $path;
+				require_once $this->get_folder() . $path;
 				$this->save_version( $version );
 			}
 		}
