@@ -9,6 +9,8 @@
 
 namespace AdvancedAds\Framework\Form;
 
+use AdvancedAds\Framework\Utilities\HTML;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -27,7 +29,8 @@ class Field_Checkbox extends Field {
 			return;
 		}
 
-		echo '<div class="advads-checkbox-list ' . sanitize_html_class( $this->get( 'class' ) ) . '">';
+		$wrap_class = HTML::classnames( 'advads-checkbox-list', $this->get( 'class' ) );
+		echo '<div class=" ' . esc_attr( $wrap_class ) . '">';
 		foreach ( $this->get( 'options' ) as $key => $label ) :
 			?>
 			<label>

@@ -10,7 +10,7 @@
 namespace AdvancedAds\Framework\Form;
 
 use AdvancedAds\Admin\Upgrades;
-use AdvancedAds\Framework\Utilities\Str;
+use AdvancedAds\Framework\Utilities\HTML;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -53,13 +53,13 @@ abstract class Field {
 	/**
 	 * Get from field data by id.
 	 *
-	 * @param string $id Id of the data to get.
-	 * @param mixed  $default Default value if not set.
+	 * @param string $id          Id of the data to get.
+	 * @param mixed  $default_val Default value if not set.
 	 *
 	 * @return mixed
 	 */
-	public function get( $id, $default = false ) {
-		return $this->field[ $id ] ?? $default;
+	public function get( $id, $default_val = false ) {
+		return $this->field[ $id ] ?? $default_val;
 	}
 
 	/**
@@ -72,35 +72,38 @@ abstract class Field {
 		 * This filter allows to extend the class dynamically by add-ons
 		 * this would allow add-ons to dynamically hide/show only attributes belonging to them, practically not used now
 		 */
-		$class = apply_filters( 'advanced-ads-option-class', $this->get( 'id' ) );
+		$class = apply_filters( 'advanced-ads-field-class', '', $this->get( 'id' ) );
 
-		$classnames = Str::classnames(
-			'advads-option',
+		$classnames = HTML::classnames(
 			'advads-field',
 			'advads-field-' . sanitize_html_class( $this->get( 'type' ) ),
-			'advads-option-' . sanitize_html_class( $class ),
+			'advads-field-' . sanitize_html_class( $this->get( 'id' ) ),
+			$class,
 			sanitize_html_class( $this->get( 'wrapper_class' ) )
 		);
 
 		$this->wrap_before();
 		?>
 		<div id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" class="<?php echo $classnames; // phpcs:ignore ?>">
-			<span class="advads-field-label"><?php echo esc_html( $this->get( 'label' ) ); ?></span>
+			<div class="advads-field-label">
+				<label class="advads-field-label" for="<?php echo esc_attr( $this->get( 'id' ) ); ?>">
+					<?php echo esc_html( $this->get( 'label' ) ); ?>
+				</label>
+			</div>
 			<div class="advads-field-input">
 				<?php
-
 				$this->render_callback( 'before' );
 				$this->render();
+
+				if ( $this->get( 'description' ) ) {
+					echo '<div class="advads-field-description">' . wp_kses_post( $this->get( 'description' ) ) . '</div>';
+				}
+
+				if ( $this->get( 'error' ) ) {
+					echo '<div class="advads-field-error">' . wp_kses_post( $this->get( 'error' ) ) . '</div>';
+				}
+
 				$this->render_callback( 'after' );
-
-				if ( $this->get( 'desc' ) ) {
-					echo '<p class="description">' . wp_kses_post( $this->get( 'desc' ) ) . '</p>';
-				}
-
-				// Place an upgrade link below the description if there is one.
-				if ( $this->get( 'is_pro_pitch' ) ) {
-					Upgrades::upgrade_link( 'upgrade-pro-' . $this->get( 'id' ) );
-				}
 				?>
 			</div>
 		</div>
@@ -138,11 +141,16 @@ abstract class Field {
 	 */
 	private function render_callback( $name ): void {
 		$callback = $this->get( $name );
-		// Early bail!!
-		if ( ! $callback || ! is_callable( $callback ) ) {
+		if ( ! $callback ) {
 			return;
 		}
 
-		call_user_func( $callback, $this );
+		if ( is_string( $callback ) ) {
+			echo $callback;
+		}
+
+		if ( is_callable( $callback ) ) {
+			call_user_func( $callback, $this );
+		}
 	}
 }
