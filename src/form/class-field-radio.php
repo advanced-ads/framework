@@ -44,9 +44,21 @@ class Field_Radio extends Field {
 				$data['item_class'] ?? '',
 				$image ? 'has-image' : 'no-image'
 			);
+
+			$input_attrs = [
+				'type'  => 'radio',
+				'id'    => $option_id,
+				'name'  => $this->get( 'name' ),
+				'value' => $data['value' ],
+			];
+
+			if ( (string) $this->get( 'value' ) === (string) $data['value'] ) {
+				$input_attrs['checked'] = 'checked';
+			}
+
 			?>
-			<label class="<?php echo esc_attr( $item_class ); ?>" data-title="<?php echo esc_attr( $title ); ?>" data-description="<?php echo esc_attr( $description ); ?>">
-				<input type="radio" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="<?php echo esc_attr( $data['value'] ); ?>" aria-labelledby="<?php echo esc_attr( $option_id ); ?>" />
+			<input <?php echo HTML::build_attributes( $input_attrs ); ?> />
+			<label class="<?php echo esc_attr( $item_class ); ?>" for="<?php echo esc_attr( $option_id ); ?>">
 				<span class="advads-radio-item-dot" aria-hidden="true"></span>
 
 				<!-- thumbnail image -->
@@ -59,7 +71,7 @@ class Field_Radio extends Field {
 					</div>
 				<?php else : ?>
 					<!-- inline meta (hidden when image exists) -->
-					<div class="advads-radio-item-meta" id="<?php echo esc_attr( $option_id ); ?>">
+					<div class="advads-radio-item-meta">
 						<div class="advads-radio-item-title"><?php echo esc_html( $title ); ?></div>
 						<div class="advads-radio-item-description"><?php echo esc_html( $description ); ?></div>
 					</div>

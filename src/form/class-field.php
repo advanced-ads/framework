@@ -84,7 +84,7 @@ abstract class Field {
 
 		$this->wrap_before();
 		?>
-		<div id="<?php echo esc_attr( $this->get( 'id' ) ); ?>" class="<?php echo $classnames; // phpcs:ignore ?>">
+		<div class="<?php echo $classnames; // phpcs:ignore ?>">
 			<div class="advads-field-label">
 				<label class="advads-field-label" for="<?php echo esc_attr( $this->get( 'id' ) ); ?>">
 					<?php echo esc_html( $this->get( 'label' ) ); ?>

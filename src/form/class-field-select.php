@@ -39,7 +39,7 @@ class Field_Select extends Field {
 		?>
 		<select <?php echo HTML::build_attributes( $attrs ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php foreach ( $this->get( 'options' ) as $option ) : ?>
-				<?php if ( $option['items'] ) : ?>
+				<?php if ( isset( $option['items'] ) ) : ?>
 				<optgroup label="<?php echo esc_attr( $option['label'] ); ?>">
 					<?php
 					foreach ( $option['items'] as $option ) {
