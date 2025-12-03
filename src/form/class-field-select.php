@@ -66,7 +66,7 @@ class Field_Select extends Field {
 	private function render_option( $option, $value ) {
 		$selected = in_array( $option['value'], $value, true );
 		?>
-		<option value="<?php echo esc_attr( $option['value'] ); ?>" <?php selected( $selected, $option['value'] ); ?>>
+		<option value="<?php echo esc_attr( $option['value'] ); ?>" <?php selected( $selected ); ?>>
 			<?php echo esc_html( $option['label'] ); ?>
 		</option>
 		<?php
