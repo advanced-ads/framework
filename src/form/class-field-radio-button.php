@@ -1,6 +1,6 @@
 <?php
 /**
- * Form radio input
+ * Form radio button input
  *
  * @package AdvancedAds\Framework\Form
  * @author  Advanced Ads <info@wpadvancedads.com>
@@ -14,9 +14,9 @@ use AdvancedAds\Framework\Utilities\HTML;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Field radio class
+ * Field radio button class
  */
-class Field_Radio extends Field {
+class Field_Radio_Button extends Field {
 
 	/**
 	 * Render field
@@ -31,13 +31,14 @@ class Field_Radio extends Field {
 
 		$counter = 1;
 
-		$wrap_class = HTML::classnames( 'advads-radio-list', $this->get( 'class' ) );
+		$wrap_class = HTML::classnames( 'advads-radio-buttons', $this->get( 'class' ) );
 		echo '<div class=" ' . esc_attr( $wrap_class ) . '">';
 		foreach ( $this->get( 'options' ) as $data ) :
 			$option_id   = $this->get( 'id' ) . '-' . ( $counter++ );
 			?>
+			<input type="radio" id="<?php echo esc_attr( $option_id ); ?>" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="<?php echo esc_attr( $data['value'] ); ?>"<?php checked( $this->get( 'value' ), $data['value'] ); ?> />
 			<label for="<?php echo esc_attr( $option_id ); ?>">
-				<input type="radio" id="<?php echo esc_attr( $option_id ); ?>" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>" value="<?php echo esc_attr( $data['value'] ); ?>"<?php checked( $this->get( 'value' ), $data['value'] ); ?> /><?php echo esc_html( $data['label'] ); ?>
+				<?php echo esc_html( $data['label'] ); ?>
 			</label>
 			<?php
 		endforeach;

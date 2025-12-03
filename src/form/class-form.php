@@ -39,18 +39,20 @@ class Form {
 	 */
 	public function __construct() {
 		$this->field_types = [
-			'checkbox' => Field_Checkbox::class,
-			'color'    => Field_Color::class,
-			'number'   => Field_Text::class,
-			'position' => Field_Position::class,
-			'password' => Field_Text::class,
-			'radio'    => Field_Radio::class,
-			'select'   => Field_Select::class,
-			'selector' => Field_Selector::class,
-			'size'     => Field_Size::class,
-			'switch'   => Field_Switch::class,
-			'text'     => Field_Text::class,
-			'textarea' => Field_Textarea::class,
+			'checkbox'       => Field_Checkbox::class,
+			'color'          => Field_Color::class,
+			'number'         => Field_Text::class,
+			'position'       => Field_Position::class,
+			'password'       => Field_Text::class,
+			'radio'          => Field_Radio::class,
+			'select'         => Field_Select::class,
+			'selector'       => Field_Selector::class,
+			'size'           => Field_Size::class,
+			'switch'         => Field_Switch::class,
+			'text'           => Field_Text::class,
+			'textarea'       => Field_Textarea::class,
+			'image_selector' => Field_Image_Selector::class,
+			'radio_button'   => Field_Radio_Button::class
 		];
 	}
 
@@ -72,6 +74,10 @@ class Form {
 
 		if ( ! isset( $args['type'] ) || empty( $args['type'] ) ) {
 			throw new Exception( 'A field must have a type.' );
+		}
+
+		if ( ! isset( $args['order'] ) ) {
+			$args['order'] = 10;
 		}
 
 		$this->fields[ $args['id'] ] = $args;
@@ -96,6 +102,8 @@ class Form {
 	 * @return void
 	 */
 	public function render() {
+		usort( $this->fields, fn( $a, $b ) => $a['order'] <=> $b['order'] );
+
 		foreach ( $this->fields as $field ) {
 			$type = $field['type'];
 
