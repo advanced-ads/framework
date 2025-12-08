@@ -59,15 +59,18 @@ class Field_Image_Selector extends Field {
 			?>
 			<input <?php echo HTML::build_attributes( $input_attrs ); ?> />
 			<label class="<?php echo esc_attr( $item_class ); ?>" for="<?php echo esc_attr( $option_id ); ?>">
-				<span class="advads-selector-item-dot" aria-hidden="true"></span>
 
-				<!-- thumbnail image -->
 				<?php if ( ! empty( $image ) ) : ?>
-					<img class="advads-selector-item-thumb" src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" />
 					<!-- tooltip meta (visible on hover/focus) -->
-					<div class="advads-selector-item-tooltip" role="tooltip">
-						<div class="advads-selector-item-title"><?php echo esc_html( $title ); ?></div>
-						<div class="advads-selector-item-description"><?php echo esc_html( $description ); ?></div>
+					<div class="advads-tooltip-new advads-tooltip-bottom">
+						<span class="advads-tooltip__controller">
+							<img class="advads-selector-item-thumb" src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" />
+						</span>
+						<div class="advads-tooltip__content" role="tooltip">
+							<span class="advads-tooltip__backdrop"></span>
+							<div class="advads-selector-item-title"><?php echo esc_html( $title ); ?></div>
+							<div class="advads-selector-item-description"><?php echo esc_html( $description ); ?></div>
+						</div>
 					</div>
 				<?php else : ?>
 					<!-- inline meta (hidden when image exists) -->

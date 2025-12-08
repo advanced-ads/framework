@@ -82,18 +82,27 @@ abstract class Field {
 			sanitize_html_class( $this->get( 'wrapper_class' ) )
 		);
 
+		$input_wrap = 'raw' !== $this->get( 'type' ) || ! empty( $this->get( 'description' ) );
+
 		$this->wrap_before();
 		?>
 		<div class="<?php echo $classnames; // phpcs:ignore ?>">
+			<?php if ( $this->get( 'label' ) ) : ?>
 			<div class="advads-field-label">
 				<label class="advads-field-label" for="<?php echo esc_attr( $this->get( 'id' ) ); ?>">
 					<?php echo esc_html( $this->get( 'label' ) ); ?>
 				</label>
 			</div>
+			<?php endif; ?>
+
+			<?php if ( $input_wrap ): ?>
 			<div class="advads-field-input">
+			<?php endif; ?>
 				<?php
 				$this->render_callback( 'before' );
+				$this->render_callback( 'before_field' );
 				$this->render();
+				$this->render_callback( 'after_field' );
 
 				if ( $this->get( 'description' ) ) {
 					echo '<div class="advads-field-description">' . wp_kses_post( $this->get( 'description' ) ) . '</div>';
@@ -102,10 +111,11 @@ abstract class Field {
 				if ( $this->get( 'error' ) ) {
 					echo '<div class="advads-field-error">' . wp_kses_post( $this->get( 'error' ) ) . '</div>';
 				}
-
 				$this->render_callback( 'after' );
 				?>
+			<?php if ( $input_wrap ): ?>
 			</div>
+			<?php endif; ?>
 		</div>
 		<?php
 		$this->wrap_after();

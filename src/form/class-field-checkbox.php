@@ -29,12 +29,15 @@ class Field_Checkbox extends Field {
 			return;
 		}
 
+		$count = count( $this->get( 'options' ) );
+		$name = $this->get( 'name' ) . ( 1 === $count ? '' : '[]' );
+
 		$wrap_class = HTML::classnames( 'advads-checkbox-list', $this->get( 'class' ) );
 		echo '<div class=" ' . esc_attr( $wrap_class ) . '">';
-		foreach ( $this->get( 'options' ) as $key => $label ) :
+		foreach ( $this->get( 'options' ) as $item ) :
 			?>
 			<label>
-				<input type="checkbox" name="<?php echo esc_attr( $this->get( 'name' ) ); ?>[]" value="<?php echo esc_attr( $key ); ?>"<?php checked( $this->get( 'value' ), $key ); ?> /><?php echo esc_html( $label ); ?>
+				<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $item['value'] ); ?>"<?php checked( $this->get( 'value' ), $item['value'] ); ?> /><?php echo esc_html( $item['label'] ); ?>
 			</label>
 			<?php
 		endforeach;
