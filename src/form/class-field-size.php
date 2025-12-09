@@ -25,7 +25,7 @@ class Field_Size extends Field {
 		$name  = $this->get( 'name' );
 		$value = $this->get( 'value' );
 		?>
-		<p class="<?php echo sanitize_html_class( $this->get( 'class' ) ); ?>">
+		<p class="<?php echo esc_attr( $this->get( 'class' ) ); ?>">
 			<?php if ( $name['width'] ) : ?>
 			<label><?php esc_html_e( 'Width', 'advanced-ads-framework' ); ?>
 			<input type="number" value="<?php echo esc_attr( $value['width'] ); ?>" name="<?php echo esc_attr( $name['width'] ); ?>"> px</label>&nbsp;

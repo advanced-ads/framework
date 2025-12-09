@@ -68,6 +68,11 @@ abstract class Field {
 	 * @return void
 	 */
 	public function render_field() {
+		if ( 'hidden' === $this->get( 'type' ) ) {
+			$this->render();
+			return;
+		}
+
 		/**
 		 * This filter allows to extend the class dynamically by add-ons
 		 * this would allow add-ons to dynamically hide/show only attributes belonging to them, practically not used now
@@ -76,17 +81,17 @@ abstract class Field {
 
 		$classnames = HTML::classnames(
 			'advads-field',
-			'advads-field-' . sanitize_html_class( $this->get( 'type' ) ),
-			'advads-field-' . sanitize_html_class( $this->get( 'id' ) ),
+			'advads-field-' . $this->get( 'type' ),
+			'advads-field-' . $this->get( 'id' ),
 			$class,
-			sanitize_html_class( $this->get( 'wrapper_class' ) )
+			$this->get( 'wrapper_class' )
 		);
 
 		$input_wrap = 'raw' !== $this->get( 'type' ) || ! empty( $this->get( 'description' ) );
 
 		$this->wrap_before();
 		?>
-		<div class="<?php echo $classnames; // phpcs:ignore ?>">
+		<div class="<?php echo esc_attr( $classnames ); ?>">
 
 			<?php
 			if ( $this->get( 'label' ) ) :

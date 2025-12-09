@@ -28,7 +28,7 @@ class Field_Select extends Field {
 		$value = is_array( $value ) ? $value : [ $value ];
 
 		$attrs = [
-			'class' => HTML::classnames( 'regular-text', sanitize_html_class( $this->get( 'class' ) ) ),
+			'class' => HTML::classnames( 'regular-text', esc_attr( $this->get( 'class' ) ) ),
 			'id'    => $this->get( 'id' ),
 			'name'  => $this->get( 'name' ),
 		];
