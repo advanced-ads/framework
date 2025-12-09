@@ -87,35 +87,30 @@ abstract class Field {
 		$this->wrap_before();
 		?>
 		<div class="<?php echo $classnames; // phpcs:ignore ?>">
-			<?php if ( $this->get( 'label' ) ) : ?>
+
+			<?php
+			if ( $this->get( 'label' ) ) :
+				$label_attrs = [];
+				if ( ! in_array( $this->get( 'type' ), [ 'checkbox', 'image_selector', 'radio', 'radio_button' ], true ) ) {
+					$label_attrs['for'] = $this->get( 'id' );
+				}
+			?>
 			<div class="advads-field-label">
-				<label class="advads-field-label" for="<?php echo esc_attr( $this->get( 'id' ) ); ?>">
+				<label <?php echo HTML::build_attributes( $label_attrs ); ?>>
 					<?php echo esc_html( $this->get( 'label' ) ); ?>
 				</label>
 			</div>
 			<?php endif; ?>
 
-			<?php if ( $input_wrap ): ?>
-			<div class="advads-field-input">
-			<?php endif; ?>
-				<?php
-				$this->render_callback( 'before' );
-				$this->render_callback( 'before_field' );
-				$this->render();
-				$this->render_callback( 'after_field' );
-
-				if ( $this->get( 'description' ) ) {
-					echo '<div class="advads-field-description">' . wp_kses_post( $this->get( 'description' ) ) . '</div>';
-				}
-
-				if ( $this->get( 'error' ) ) {
-					echo '<div class="advads-field-error">' . wp_kses_post( $this->get( 'error' ) ) . '</div>';
-				}
-				$this->render_callback( 'after' );
-				?>
-			<?php if ( $input_wrap ): ?>
-			</div>
-			<?php endif; ?>
+			<?php
+			if ( $input_wrap ) {
+				echo '<div class="advads-field-input">';
+				$this->input();
+				echo '</div>';
+			} else {
+				$this->input();
+			}
+			?>
 		</div>
 		<?php
 		$this->wrap_after();
@@ -141,6 +136,29 @@ abstract class Field {
 	 * @return void
 	 */
 	abstract public function render();
+
+	/**
+	 * Render input.
+	 *
+	 * @return void
+	 */
+	private function input(): void {
+		$this->render_callback( 'before' );
+
+		$this->render_callback( 'before_field' );
+		$this->render();
+		$this->render_callback( 'after_field' );
+
+		if ( $this->get( 'description' ) ) {
+			echo '<div class="advads-field-description">' . wp_kses_post( $this->get( 'description' ) ) . '</div>';
+		}
+
+		if ( $this->get( 'error' ) ) {
+			echo '<div class="advads-field-error">' . wp_kses_post( $this->get( 'error' ) ) . '</div>';
+		}
+
+		$this->render_callback( 'after' );
+	}
 
 	/**
 	 * Render callback
