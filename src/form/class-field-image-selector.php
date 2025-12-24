@@ -62,12 +62,11 @@ class Field_Image_Selector extends Field {
 
 				<?php if ( ! empty( $image ) ) : ?>
 					<!-- tooltip meta (visible on hover/focus) -->
-					<div class="advads-tooltip-new advads-tooltip-bottom">
-						<span class="advads-tooltip__controller">
+					<div class="advads-tooltip-alt">
+						<span class="advads-tooltip-controller">
 							<img class="advads-selector-item-thumb" src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" />
 						</span>
-						<div class="advads-tooltip__content" role="tooltip">
-							<span class="advads-tooltip__backdrop"></span>
+						<div class="advads-tooltip-content" role="tooltip">
 							<div class="advads-selector-item-title"><?php echo esc_html( $title ); ?></div>
 							<div class="advads-selector-item-description"><?php echo esc_html( $description ); ?></div>
 						</div>
