@@ -10,7 +10,6 @@
 namespace AdvancedAds\Framework\Form;
 
 use Exception;
-use ftp;
 
 defined( 'ABSPATH' ) || exit;
 
