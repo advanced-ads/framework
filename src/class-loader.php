@@ -9,8 +9,6 @@
 
 namespace AdvancedAds\Framework;
 
-use ReflectionClass;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -199,15 +197,14 @@ class Loader {
 			return;
 		}
 
-		$container = new ReflectionClass( $class_name );
-		$container = $container->newInstanceArgs( $arguments );
+		$container = empty( $arguments ) ? new $class_name() : new $class_name( ...$arguments );
 		if ( null === $container ) {
 			return;
 		}
 
 		$container->$method();
 
-		if ( is_string( $alias ) ) {
+		if ( is_string( $alias ) && '' !== $alias ) {
 			$this->containers[ $alias ] = $container;
 		}
 	}
