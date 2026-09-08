@@ -46,14 +46,16 @@ class Str {
 	}
 
 	/**
-	 * Validates whether the passed variable is a empty string.
+	 * Validates whether the passed variable is an empty string (or not a string).
 	 *
 	 * @param mixed $str The variable to validate.
 	 *
-	 * @return bool Whether or not the passed value is a non-empty string.
+	 * @return bool True when $str is not a non-empty string.
+	 *
+	 * @phpstan-assert-if-false non-empty-string $str
 	 */
 	public static function is_empty( $str ): bool {
-		return ! is_string( $str ) || empty( $str );
+		return ! is_string( $str ) || '' === $str;
 	}
 
 	/**
@@ -62,9 +64,34 @@ class Str {
 	 * @param mixed $str The variable to validate.
 	 *
 	 * @return bool Whether or not the passed value is a non-empty string.
+	 *
+	 * @phpstan-assert-if-true non-empty-string $str
 	 */
 	public static function is_non_empty( $str ): bool {
 		return is_string( $str ) && '' !== $str;
+	}
+
+	/**
+	 * Return $value if it is a string, otherwise $default.
+	 *
+	 * Does not cast arrays/objects (unlike `(string) $mixed`, which PHPStan
+	 * rejects). Int/float are stringified so numeric option values still work.
+	 *
+	 * @param mixed  $value   Value that might be a string.
+	 * @param string $default Fallback when $value isn't string-like.
+	 *
+	 * @return string
+	 */
+	public static function to_string( $value, string $default = '' ): string {
+		if ( is_string( $value ) ) {
+			return $value;
+		}
+
+		if ( is_int( $value ) || is_float( $value ) ) {
+			return (string) $value;
+		}
+
+		return $default;
 	}
 
 	/**
