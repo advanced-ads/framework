@@ -9,8 +9,8 @@
 
 namespace AdvancedAds\Framework\Installation;
 
-use WP_Site;
 use AdvancedAds\Framework\Interfaces\Initializer_Interface;
+use WP_Site;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -82,6 +82,14 @@ abstract class Install implements Initializer_Interface {
 	 * @return void
 	 */
 	public function initialize_site( $site ): void {
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		if ( ! is_plugin_active_for_network( plugin_basename( $this->base_file ) ) ) {
+			return;
+		}
+
 		switch_to_blog( $site->blog_id );
 		$this->activate();
 		restore_current_blog();
@@ -125,6 +133,7 @@ abstract class Install implements Initializer_Interface {
 				'deleted'    => 0,
 				'network_id' => $wpdb->siteid,
 				'fields'     => 'ids',
+				'number'     => 0,
 			]
 		);
 	}

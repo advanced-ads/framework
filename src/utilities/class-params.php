@@ -132,8 +132,13 @@ class Params {
 	/**
 	 * Get field from input.
 	 *
-	 * Falls back to the matching PHPUnit-friendly superglobal when filter_input
-	 * cannot see the value (CLI / tests that assign $_GET/$_POST directly).
+	 * Reads the superglobal rather than filter_input(). filter_input() serves a
+	 * snapshot the SAPI takes at request start, so it cannot see anything written
+	 * to $_GET/$_POST afterwards: it bypasses hardening plugins that sanitize
+	 * those in place, and it is always empty under CLI.
+	 *
+	 * wp_unslash() undoes wp_magic_quotes(), so callers get the same unslashed
+	 * value filter_input() used to return.
 	 *
 	 * @param int    $input   Input to get from.
 	 * @param string $id      Field id to get.
@@ -144,36 +149,15 @@ class Params {
 	 * @return mixed
 	 */
 	private static function input( $input, $id, $default = false, $filter = FILTER_DEFAULT, $flag = [] ) {
-		if ( filter_has_var( $input, $id ) ) {
-			return filter_input( $input, $id, $filter, $flag );
-		}
+		$bags = [
+			INPUT_GET    => $_GET, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			INPUT_POST   => $_POST, // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			INPUT_COOKIE => $_COOKIE,
+		];
 
-		$value = self::superglobal_value( $input, $id );
-		if ( null === $value ) {
-			return $default;
-		}
+		// An unknown $input, a missing key and an explicit null all mean "not sent".
+		$value = $bags[ $input ][ $id ] ?? null;
 
-		return filter_var( wp_unslash( $value ), $filter, $flag );
-	}
-
-	/**
-	 * Read a raw value from a request/cookie bag when filter_input is unavailable.
-	 *
-	 * @param int    $input Input constant.
-	 * @param string $id    Field id.
-	 *
-	 * @return mixed|null
-	 */
-	private static function superglobal_value( $input, $id ) {
-		switch ( $input ) {
-			case INPUT_GET:
-				return array_key_exists( $id, $_GET ) ? $_GET[ $id ] : null; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			case INPUT_POST:
-				return array_key_exists( $id, $_POST ) ? $_POST[ $id ] : null; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			case INPUT_COOKIE:
-				return array_key_exists( $id, $_COOKIE ) ? $_COOKIE[ $id ] : null;
-			default:
-				return null;
-		}
+		return null === $value ? $default : filter_var( wp_unslash( $value ), $filter, $flag );
 	}
 }
