@@ -178,11 +178,7 @@ class JSON {
 			return;
 		}
 
-		echo "<script type='text/javascript'>\n"; // CDATA and type='text/javascript' is not needed for HTML 5.
-		echo "/* <![CDATA[ */\n";
-		echo "$script\n"; // phpcs:ignore
-		echo "/* ]]> */\n";
-		echo "</script>\n";
+		wp_print_inline_script_tag( $script );
 	}
 
 	/**

@@ -44,7 +44,7 @@ class Manager extends Storage {
 
 		foreach ( $this->get_notices() as $notice ) {
 			if ( $notice->can_display() ) {
-				echo $notice; // phpcs:ignore
+				echo wp_kses_post( $notice->render() );
 			}
 		}
 	}

@@ -33,6 +33,17 @@ class HTML {
 	}
 
 	/**
+	 * Print escaped HTML attributes with a leading space.
+	 *
+	 * @param array $raw_attributes Attribute name value pairs.
+	 *
+	 * @return void
+	 */
+	public static function print_attributes( $raw_attributes ): void {
+		echo ' ' . self::build_attributes( $raw_attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- build_attributes() escapes every name and value.
+	}
+
+	/**
 	 * Generate classnames from arguments
 	 *
 	 * @return string

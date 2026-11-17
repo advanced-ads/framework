@@ -203,17 +203,17 @@ class Notice implements Serializable {
 		}
 
 		if ( ! empty( $this->option( 'id' ) ) ) {
-			$attributes[] = sprintf( 'id="%s"', $this->option( 'id' ) );
+			$attributes[] = sprintf( 'id="%s"', esc_attr( $this->option( 'id' ) ) );
 		}
 
 		// Maintain WordPress visualization of alerts when they are not persistent.
 		if ( $this->is_persistent() ) {
 			$classes[]    = 'is-dismissible';
-			$attributes[] = sprintf( 'data-key="%s"', $this->option( 'persistent' ) );
-			$attributes[] = sprintf( 'data-security="%s"', wp_create_nonce( $this->option( 'id' ) ) );
+			$attributes[] = sprintf( 'data-key="%s"', esc_attr( $this->option( 'persistent' ) ) );
+			$attributes[] = sprintf( 'data-security="%s"', esc_attr( wp_create_nonce( $this->option( 'id' ) ) ) );
 		}
 
-		$attributes[] = sprintf( 'class="%s"', join( ' ', $classes ) );
+		$attributes[] = sprintf( 'class="%s"', esc_attr( join( ' ', $classes ) ) );
 
 		// Build the output DIV.
 		return '<div ' . join( ' ', $attributes ) . '>' . wpautop( $this->message ) . '</div>' . PHP_EOL;

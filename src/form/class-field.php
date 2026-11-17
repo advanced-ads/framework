@@ -101,7 +101,7 @@ abstract class Field {
 				}
 			?>
 			<div class="advads-field-label">
-				<label <?php echo HTML::build_attributes( $label_attrs ); ?>>
+				<label<?php HTML::print_attributes( $label_attrs ); ?>>
 					<?php echo esc_html( $this->get( 'label' ) ); ?>
 				</label>
 			</div>
@@ -179,7 +179,7 @@ abstract class Field {
 		}
 
 		if ( is_string( $callback ) ) {
-			echo $callback;
+			echo wp_kses_post( $callback );
 		}
 
 		if ( is_callable( $callback ) ) {

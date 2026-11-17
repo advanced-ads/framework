@@ -37,7 +37,7 @@ class Field_Select extends Field {
 			$attrs['multiple'] = 'multiple';
 		}
 		?>
-		<select <?php echo HTML::build_attributes( $attrs ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+		<select<?php HTML::print_attributes( $attrs ); ?>>
 			<?php foreach ( $this->get( 'options' ) as $option ) : ?>
 				<?php if ( isset( $option['items'] ) ) : ?>
 				<optgroup label="<?php echo esc_attr( $option['label'] ); ?>">

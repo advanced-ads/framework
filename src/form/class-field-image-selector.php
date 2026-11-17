@@ -57,7 +57,7 @@ class Field_Image_Selector extends Field {
 			}
 
 			?>
-			<input <?php echo HTML::build_attributes( $input_attrs ); ?> />
+			<input<?php HTML::print_attributes( $input_attrs ); ?> />
 			<label class="<?php echo esc_attr( $item_class ); ?>" for="<?php echo esc_attr( $option_id ); ?>">
 
 				<?php if ( ! empty( $image ) ) : ?>
