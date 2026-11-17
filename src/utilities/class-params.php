@@ -104,6 +104,9 @@ class Params {
 	/**
 	 * Get field from FORM server.
 	 *
+	 * $_SERVER values can be set by the request, so without an explicit filter they are sanitized:
+	 * URLs (REQUEST_URI, HTTP_REFERER) keep their %xx encoding, everything else is treated as plain text.
+	 *
 	 * @param string $id      Field id to get.
 	 * @param mixed  $default Default value to return if field is not found.
 	 * @param int    $filter  The ID of the filter to apply.
@@ -112,7 +115,25 @@ class Params {
 	 * @return mixed
 	 */
 	public static function server( $id, $default = false, $filter = FILTER_DEFAULT, $flag = [] ) {
-		return isset( $_SERVER[ $id ] ) ? filter_var( wp_unslash( $_SERVER[ $id ] ), $filter, $flag ) : $default;
+		if ( ! isset( $_SERVER[ $id ] ) ) {
+			return $default;
+		}
+
+		$value = function_exists( 'wp_unslash' ) ? wp_unslash( $_SERVER[ $id ] ) : $_SERVER[ $id ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized below.
+
+		if ( FILTER_DEFAULT !== $filter ) {
+			return filter_var( $value, $filter, $flag );
+		}
+
+		if ( ! is_string( $value ) ) {
+			return $default;
+		}
+
+		if ( in_array( $id, [ 'REQUEST_URI', 'HTTP_REFERER' ], true ) ) {
+			return function_exists( 'esc_url_raw' ) ? esc_url_raw( $value ) : filter_var( strip_tags( $value ), FILTER_SANITIZE_URL ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- fallback outside WordPress.
+		}
+
+		return function_exists( 'sanitize_text_field' ) ? sanitize_text_field( $value ) : trim( strip_tags( $value ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- fallback outside WordPress.
 	}
 
 	/**
