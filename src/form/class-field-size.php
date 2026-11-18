@@ -27,12 +27,12 @@ class Field_Size extends Field {
 		?>
 		<p class="<?php echo esc_attr( $this->get( 'class' ) ); ?>">
 			<?php if ( $name['width'] ) : ?>
-			<label><?php esc_html_e( 'Width', 'advanced-ads-framework' ); ?>
+			<label><?php esc_html_e( 'Width', 'advanced-ads' ); ?>
 			<input type="number" value="<?php echo esc_attr( $value['width'] ); ?>" name="<?php echo esc_attr( $name['width'] ); ?>"> px</label>&nbsp;
 			<?php endif; ?>
 
 			<?php if ( $name['height'] ) : ?>
-			<label><?php esc_html_e( 'Height', 'advanced-ads-framework' ); ?>
+			<label><?php esc_html_e( 'Height', 'advanced-ads' ); ?>
 			<input type="number" value="<?php echo esc_attr( $value['height'] ); ?>" name="<?php echo esc_attr( $name['height'] ); ?>"> px</label>
 			<?php endif; ?>
 		</p>
