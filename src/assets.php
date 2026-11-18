@@ -9,8 +9,8 @@
 
 namespace AdvancedAds\Framework;
 
-// Early bail!!
-if ( ! function_exists( 'add_action' ) ) {
+// Early bail!! Return rather than exit: Composer loads this file outside WordPress too.
+if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
