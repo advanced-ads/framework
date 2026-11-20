@@ -26,7 +26,7 @@ class Params {
 	 * Get field from query string.
 	 *
 	 * Without an explicit $filter, values are sanitized (sanitize_text_field for
-	 * strings; recursive for arrays). Pass FILTER_DEFAULT / FILTER_UNSAFE_RAW
+	 * strings; arrays return false). Pass FILTER_DEFAULT / FILTER_UNSAFE_RAW
 	 * (or another filter) when the caller needs the raw value — e.g. HTML.
 	 *
 	 * @param string   $id      Field id to get.
@@ -44,7 +44,7 @@ class Params {
 	 * Get field from FORM post.
 	 *
 	 * Without an explicit $filter, values are sanitized (sanitize_text_field for
-	 * strings; recursive for arrays). Pass FILTER_DEFAULT / FILTER_UNSAFE_RAW
+	 * strings; arrays return false). Pass FILTER_DEFAULT / FILTER_UNSAFE_RAW
 	 * (or another filter) when the caller needs the raw value — e.g. HTML.
 	 *
 	 * @param string   $id      Field id to get.
@@ -100,7 +100,7 @@ class Params {
 	 * Get field from FORM cookie.
 	 *
 	 * Without an explicit $filter, values are sanitized (sanitize_text_field for
-	 * strings; recursive for arrays). Pass FILTER_DEFAULT / FILTER_UNSAFE_RAW
+	 * strings; arrays return false). Pass FILTER_DEFAULT / FILTER_UNSAFE_RAW
 	 * (or another filter) when the caller needs the raw value.
 	 *
 	 * @param string   $id      Field id to get.
@@ -174,9 +174,10 @@ class Params {
 	 * wp_unslash() undoes wp_magic_quotes(), so callers get the same unslashed
 	 * value filter_input() used to return.
 	 *
-	 * When $filter is null, values are sanitized with sanitize_text_field()
-	 * (recursively for arrays). An explicit filter (including FILTER_DEFAULT)
-	 * is passed to filter_var() unchanged.
+	 * When $filter is null, strings are sanitized with sanitize_text_field()
+	 * and arrays return false, as filter_var() with FILTER_DEFAULT did; pass
+	 * FILTER_DEFAULT with FILTER_REQUIRE_ARRAY to read an array. An explicit
+	 * filter (including FILTER_DEFAULT) is passed to filter_var() unchanged.
 	 *
 	 * @param int      $input   Input to get from.
 	 * @param string   $id      Field id to get.
@@ -210,7 +211,9 @@ class Params {
 	}
 
 	/**
-	 * Sanitize a request value: strings via sanitize_text_field, arrays recursively.
+	 * Sanitize a request value read without a filter.
+	 *
+	 * An array returns false, so a field sent as `name[]` never reaches code that expects a string.
 	 *
 	 * @param mixed $value Raw unslashed value.
 	 *
@@ -218,11 +221,7 @@ class Params {
 	 */
 	private static function sanitize_value( $value ) {
 		if ( is_array( $value ) ) {
-			foreach ( $value as $key => $item ) {
-				$value[ $key ] = self::sanitize_value( $item );
-			}
-
-			return $value;
+			return false;
 		}
 
 		if ( ! is_string( $value ) ) {
